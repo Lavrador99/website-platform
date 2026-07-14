@@ -10,7 +10,11 @@ interface RootLayoutProps {
 
 export function RootLayout({ navbarProps, footerProps, children }: RootLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--color-background)]">
+    // min-h-svh keeps the layout consistent with the 100svh baseline set on
+    // #root in index.css (svh accounts for dynamic viewport on mobile browsers;
+    // min-h-screen uses vh which does not). bg-[var(--color-background)] is
+    // removed — body already sets this token, so it was redundant here.
+    <div className="min-h-svh flex flex-col">
       <Navbar {...navbarProps} />
       <main id="main-content" className="flex-1">
         {children}

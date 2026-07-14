@@ -34,9 +34,9 @@ function Spinner() {
 
 const variantClasses = {
   primary:
-    'bg-[var(--color-primary)] text-white hover:opacity-90',
+    'bg-[var(--color-primary)] text-white hover:opacity-90 hover:-translate-y-0.5',
   secondary:
-    'bg-[var(--color-secondary)] text-white hover:opacity-90',
+    'bg-[var(--color-secondary)] text-white hover:opacity-90 hover:-translate-y-0.5',
   outline:
     'border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white',
   ghost:
@@ -50,7 +50,7 @@ const sizeClasses = {
 } as const
 
 const baseClasses =
-  'inline-flex items-center gap-2 rounded-md font-medium transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] disabled:opacity-50 disabled:pointer-events-none'
+  'inline-flex items-center gap-2 rounded-md font-medium transition-all duration-200 active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] disabled:opacity-50 disabled:pointer-events-none'
 
 // --- Discriminated union for href vs button ---
 

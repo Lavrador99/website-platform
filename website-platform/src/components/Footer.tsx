@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { memo, type ReactNode } from 'react'
 import clsx from 'clsx'
 import { Container } from './Container'
 
@@ -22,11 +22,18 @@ export interface FooterProps {
   className?: string
 }
 
-export function Footer({ logo, tagline, links, socialLinks, copyright, className }: FooterProps) {
+/**
+ * Footer is wrapped in memo for the same reason as Navbar: it lives inside
+ * RootLayoutContainer which re-renders on every route change, but the footer's
+ * content (logo, tagline, link groups, copyright) is fully stable once the
+ * client config is loaded. With footerProps memoized in the container, Footer
+ * will never re-render during normal navigation.
+ */
+export const Footer = memo(function Footer({ logo, tagline, links, socialLinks, copyright, className }: FooterProps) {
   return (
     <footer
       className={clsx(
-        'bg-[var(--color-surface)] border-t border-[var(--color-border)]',
+        'bg-[var(--color-surface)] border-t-2 border-[var(--color-primary)]',
         className,
       )}
     >
@@ -61,7 +68,7 @@ export function Footer({ logo, tagline, links, socialLinks, copyright, className
                         <li key={`${group.group}:${item.href}`}>
                           <a
                             href={item.href}
-                            className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] rounded-sm"
+                            className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] rounded-sm"
                           >
                             {item.label}
                           </a>
@@ -78,7 +85,7 @@ export function Footer({ logo, tagline, links, socialLinks, copyright, className
         {/* Bottom row */}
         <div className="border-t border-[var(--color-border)] py-6 flex flex-col-reverse items-center gap-4 sm:flex-row sm:justify-between">
           {copyright && (
-            <p className="text-sm text-[var(--color-text-muted)]">{copyright}</p>
+            <p className="text-xs text-[var(--color-text-muted)]">{copyright}</p>
           )}
 
           {/* Social links — aria-label on the <a> provides the accessible name
@@ -109,6 +116,6 @@ export function Footer({ logo, tagline, links, socialLinks, copyright, className
       </Container>
     </footer>
   )
-}
+})
 
 export default Footer

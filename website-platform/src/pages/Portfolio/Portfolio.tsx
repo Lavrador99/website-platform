@@ -22,7 +22,7 @@ export function Portfolio({ portfolio }: PortfolioProps) {
             {portfolio.items.map((item) => (
               <div
                 key={item.title}
-                className="bg-[var(--color-background)] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-[box-shadow] flex flex-col"
+                className="bg-[var(--color-background)] rounded-xl overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-xl transition-[transform,box-shadow] duration-300 flex flex-col"
               >
                 {/* Accent bar */}
                 <div
@@ -33,7 +33,7 @@ export function Portfolio({ portfolio }: PortfolioProps) {
 
                 <div className="flex flex-col gap-4 p-6 flex-1">
                   {/* Category badge */}
-                  <span className="inline-block self-start px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
+                  <span className="inline-flex items-center self-start rounded-full px-2.5 py-0.5 text-xs font-medium bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
                     {item.category}
                   </span>
 
@@ -54,7 +54,7 @@ export function Portfolio({ portfolio }: PortfolioProps) {
                       {item.tags.map((tag) => (
                         <li
                           key={tag}
-                          className="px-2 py-0.5 rounded text-xs bg-[var(--color-surface)] text-[var(--color-text-muted)] border border-[var(--color-border)]"
+                          className="inline-flex items-center rounded-full px-2 py-0.5 text-xs bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-muted)]"
                         >
                           {tag}
                         </li>

@@ -43,16 +43,18 @@ export function CTA({
           <p
             className={clsx(
               'max-w-2xl text-lg',
-              background === 'surface'
-                ? 'text-[var(--color-text-muted)]'
-                : 'opacity-90',
+              // 'surface' background: use the muted text token (dark text, passes 4.5:1 on #f8fafc).
+              // 'primary' and 'gradient' backgrounds render white text inherited from Section /
+              // the gradient wrapper's text-white class. Do NOT apply opacity here — white at
+              // opacity-90 on the primary blue (#2563eb) drops to ~4.29:1, failing WCAG 1.4.3.
+              background === 'surface' ? 'text-[var(--color-text-muted)]' : '',
             )}
           >
             {subheadline}
           </p>
         )}
         {hasActions && (
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             {primaryAction}
             {secondaryAction}
           </div>
@@ -72,7 +74,7 @@ export function CTA({
         spacing={spacing}
         aria-label={headline}
         className={clsx(
-          'bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-secondary)] text-white',
+          'bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-primary)] text-white',
           className,
         )}
       >

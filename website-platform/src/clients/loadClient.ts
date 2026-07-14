@@ -16,8 +16,12 @@ import type { WebsiteConfig } from '@app-types/website-config'
 
 /** Returns the active client slug from the environment, falling back to "demo". */
 export function getClientSlug(): string {
+  // import.meta.env returns `any` for bracket access — the cast to
+  // `string | undefined` is the appropriate narrowing here.
   const slug = import.meta.env['VITE_CLIENT'] as string | undefined
-  return slug?.trim() !== '' && slug !== undefined ? slug.trim() : 'demo'
+  // Check defined-and-non-empty in the natural order so the condition reads
+  // left-to-right without relying on optional-chaining short-circuit semantics.
+  return slug !== undefined && slug.trim() !== '' ? slug.trim() : 'demo'
 }
 
 /**
@@ -35,7 +39,7 @@ export async function loadClient(slug?: string): Promise<WebsiteConfig> {
   // Vite requires a static string prefix for dynamic imports to enable
   // code splitting. The variable portion is the slug only.
   try {
-    const module = (await import(/* @vite-ignore */ `./` + clientSlug + `/config.ts`)) as {
+    const module = (await import(`./${clientSlug}/config.ts`)) as {
       default: WebsiteConfig
     }
 

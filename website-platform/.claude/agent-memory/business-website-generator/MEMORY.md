@@ -1,0 +1,2 @@
+- [Platform structure & client config conventions](project_platform_structure.md) — WebsiteConfig interface location, import alias, required fields, tsc check command
+- [Construction vertical — Portuguese patterns](vertical_construction_pt.md) — Effective copy, colors, services, team roles, contact form, Coimbra-specific details for PT construction clients

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { Container } from './Container'
 
@@ -16,10 +16,39 @@ export interface NavbarProps {
   className?: string
 }
 
-export function Navbar({ logo, links, cta, sticky = true, className }: NavbarProps) {
+/**
+ * Navbar is wrapped in memo because:
+ *  1. It lives inside RootLayoutContainer, which re-renders on every route
+ *     change due to useLocation().
+ *  2. navbarProps is memoized in RootLayoutContainer, so Navbar's props are
+ *     referentially stable between navigations unless the active link changes.
+ *  3. Navbar contains its own mobileOpen state and is non-trivial to render
+ *     (two lists of links, SVG icons, clsx calls). Skipping the re-render on
+ *     unrelated parent updates is a measurable win on low-end devices.
+ */
+export const Navbar = memo(function Navbar({ logo, links, cta, sticky = true, className }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const toggleId = 'navbar-mobile-menu'
+
+  // WCAG 2.4.3 Focus Order — when the mobile menu opens, move focus to the
+  // first link so keyboard and screen reader users immediately know a menu is
+  // available without having to Tab past the rest of the page.
+  // When the menu closes via Escape or a link click, focus is NOT explicitly
+  // returned to the hamburger button here because:
+  //   • clicking a link navigates away (focus lands on the new page's first element)
+  //   • the toggle button onClick handler already returns focus implicitly since
+  //     the user's focus never left the button when they clicked it.
+  const firstMenuLinkRef = useRef<HTMLAnchorElement>(null)
+
+  useEffect(() => {
+    if (mobileOpen) {
+      // Defer one tick so the hidden class is removed and the element is
+      // visible + focusable before we attempt to focus it.
+      const id = setTimeout(() => firstMenuLinkRef.current?.focus(), 0)
+      return () => clearTimeout(id)
+    }
+  }, [mobileOpen])
 
   return (
     <>
@@ -36,7 +65,7 @@ export function Navbar({ logo, links, cta, sticky = true, className }: NavbarPro
       <header
         className={clsx(
           'border-b border-[var(--color-border)]',
-          sticky && 'sticky top-0 z-50 backdrop-blur-md bg-[var(--color-background)]/90',
+          sticky && 'sticky top-0 z-50 backdrop-blur-md bg-[var(--color-background)]/90 shadow-md',
           className,
         )}
       >
@@ -58,7 +87,7 @@ export function Navbar({ logo, links, cta, sticky = true, className }: NavbarPro
                   <a
                     href={link.href}
                     className={clsx(
-                      'text-sm font-medium transition-colors duration-200 hover:text-[var(--color-primary)] rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]',
+                      'relative text-sm font-medium transition-colors duration-200 hover:text-[var(--color-primary)] rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-[var(--color-primary)] after:transition-all after:duration-300 hover:after:w-full',
                       link.active
                         ? 'text-[var(--color-primary)] underline underline-offset-4'
                         : 'text-[var(--color-text)]',
@@ -80,7 +109,7 @@ export function Navbar({ logo, links, cta, sticky = true, className }: NavbarPro
                 focus-visible styles provide a visible keyboard focus indicator. */}
             <button
               type="button"
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-[var(--color-text)] hover:text-[var(--color-primary)] hover:bg-[var(--color-surface)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
+              className="md:hidden inline-flex items-center justify-center min-h-[44px] min-w-[44px] rounded-md text-[var(--color-text)] hover:text-[var(--color-primary)] hover:bg-[var(--color-surface)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
               aria-expanded={mobileOpen}
               aria-controls={toggleId}
               aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
@@ -136,12 +165,13 @@ export function Navbar({ logo, links, cta, sticky = true, className }: NavbarPro
         >
           <Container size="xl">
             <ul className="flex flex-col py-4 gap-1 list-none m-0 px-0">
-              {links.map((link) => (
+              {links.map((link, index) => (
                 <li key={link.href}>
                   <a
+                    ref={index === 0 ? firstMenuLinkRef : undefined}
                     href={link.href}
                     className={clsx(
-                      'block px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:text-[var(--color-primary)] hover:bg-[var(--color-surface)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]',
+                      'flex items-center min-h-[44px] px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:text-[var(--color-primary)] hover:bg-[var(--color-surface)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]',
                       link.active
                         ? 'text-[var(--color-primary)] bg-[var(--color-surface)]'
                         : 'text-[var(--color-text)]',
@@ -164,6 +194,6 @@ export function Navbar({ logo, links, cta, sticky = true, className }: NavbarPro
       </header>
     </>
   )
-}
+})
 
 export default Navbar

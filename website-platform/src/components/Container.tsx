@@ -1,5 +1,4 @@
-import { forwardRef } from 'react'
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { HTMLAttributes, ReactNode, Ref } from 'react'
 import clsx from 'clsx'
 
 const sizeClasses = {
@@ -14,20 +13,20 @@ export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
   children: ReactNode
   className?: string
+  // React 19: ref is a plain prop — forwardRef is no longer needed.
+  ref?: Ref<HTMLDivElement>
 }
 
-export const Container = forwardRef<HTMLDivElement, ContainerProps>(
-  function Container({ size = 'lg', children, className, ...rest }, ref) {
-    return (
-      <div
-        ref={ref}
-        className={clsx('mx-auto px-4 sm:px-6 lg:px-8', sizeClasses[size], className)}
-        {...rest}
-      >
-        {children}
-      </div>
-    )
-  },
-)
+export function Container({ size = 'lg', children, className, ref, ...rest }: ContainerProps) {
+  return (
+    <div
+      ref={ref}
+      className={clsx('mx-auto px-4 sm:px-6 lg:px-8', sizeClasses[size], className)}
+      {...rest}
+    >
+      {children}
+    </div>
+  )
+}
 
 export default Container

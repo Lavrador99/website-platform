@@ -31,7 +31,7 @@ export function SectionTitle({
         </p>
       )}
       <Heading
-        className="font-heading text-3xl font-bold leading-tight tracking-tight text-[var(--color-text)] sm:text-4xl"
+        className="font-heading text-3xl font-bold leading-tight tracking-tight text-[var(--color-text)] sm:text-4xl lg:text-5xl"
       >
         {title}
       </Heading>

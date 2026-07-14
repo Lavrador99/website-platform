@@ -7,8 +7,13 @@ export interface AboutProps {
 }
 
 export function About({ about, businessName }: AboutProps) {
-  // Split the body text into paragraphs on double newlines
-  const bodyParagraphs = about.body.split('\n\n').slice(0, 2)
+  // Split the body text into paragraphs on double newlines. Trim each paragraph
+  // so leading/trailing whitespace does not produce empty strings or mismatched keys.
+  const bodyParagraphs = about.body
+    .split('\n\n')
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .slice(0, 2)
 
   return (
     <>
@@ -17,8 +22,8 @@ export function About({ about, businessName }: AboutProps) {
         <Container size="lg">
           <SectionTitle title={about.headline} subtitle={businessName} />
           <div className="max-w-3xl mx-auto flex flex-col gap-6">
-            {bodyParagraphs.map((para, i) => (
-              <p key={i} className="text-lg text-[var(--color-text-muted)] leading-relaxed">
+            {bodyParagraphs.map((para) => (
+              <p key={para} className="text-lg text-[var(--color-text-muted)] leading-relaxed">
                 {para}
               </p>
             ))}
@@ -43,7 +48,7 @@ export function About({ about, businessName }: AboutProps) {
                   <h3 className="font-heading text-xl font-semibold text-[var(--color-text)]">
                     {value.title}
                   </h3>
-                  <p className="text-[var(--color-text-muted)] leading-relaxed">
+                  <p className="text-sm text-[var(--color-text-muted)] leading-relaxed">
                     {value.description}
                   </p>
                 </div>

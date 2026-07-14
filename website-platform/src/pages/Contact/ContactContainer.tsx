@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useWebsiteConfig } from '@hooks/useWebsiteConfig'
 import { Section, Container } from '@components'
 import { Contact } from './Contact'

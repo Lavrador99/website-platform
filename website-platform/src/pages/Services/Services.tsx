@@ -30,7 +30,7 @@ export function Services({ services, cta }: ServicesProps) {
                   {/* Icon + title */}
                   <div className="flex items-center gap-4">
                     <span
-                      className="flex items-center justify-center w-14 h-14 rounded-xl bg-[var(--color-primary)]/10 text-3xl"
+                      className="flex shrink-0 items-center justify-center w-14 h-14 rounded-xl bg-[var(--color-primary)]/10 text-3xl"
                       aria-hidden="true"
                     >
                       {service.icon}
@@ -52,7 +52,7 @@ export function Services({ services, cta }: ServicesProps) {
                         className="flex items-start gap-2 text-sm text-[var(--color-text)]"
                       >
                         <span
-                          className="mt-0.5 flex-shrink-0 text-[var(--color-primary)]"
+                          className="mt-0.5 flex-shrink-0 text-[var(--color-primary)] opacity-70 font-bold"
                           aria-hidden="true"
                         >
                           ✓

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Section, SectionTitle, Card, Button, Container } from '@components'
 import type { WebsiteConfig } from '@app-types/website-config'
 
@@ -29,13 +29,13 @@ export function Contact({ contactPage, contact, businessName, onSubmit, submitSt
     setFieldValues((prev) => ({ ...prev, [name]: value }))
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     await onSubmit(fieldValues)
   }
 
   const inputBaseClasses =
-    'w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-background)] px-4 py-2.5 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-2 focus:outline-offset-0 focus:outline-[var(--color-primary)] transition-colors'
+    'w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-[border-color,box-shadow] duration-200'
 
   const defaultSuccess =
     "Thank you — we've received your message and will be in touch shortly."
@@ -61,6 +61,7 @@ export function Contact({ contactPage, contact, businessName, onSubmit, submitSt
                   aria-live="polite"
                   className="rounded-xl border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/5 p-8 text-center"
                 >
+                  <p className="text-4xl mb-4 text-[var(--color-primary)]" aria-hidden="true">✓</p>
                   <p className="text-lg font-medium text-[var(--color-text)]">
                     {contactPage.successMessage ?? defaultSuccess}
                   </p>
@@ -96,10 +97,11 @@ export function Contact({ contactPage, contact, businessName, onSubmit, submitSt
                             name={field.name}
                             placeholder={field.placeholder}
                             required={field.required}
+                            aria-required={field.required || undefined}
                             value={value}
                             onChange={(e) => handleChange(field.name, e.target.value)}
                             rows={5}
-                            className={inputBaseClasses}
+                            className={`${inputBaseClasses} min-h-[120px] resize-y`}
                           />
                         )}
 
@@ -108,6 +110,7 @@ export function Contact({ contactPage, contact, businessName, onSubmit, submitSt
                             id={id}
                             name={field.name}
                             required={field.required}
+                            aria-required={field.required || undefined}
                             value={value}
                             onChange={(e) => handleChange(field.name, e.target.value)}
                             className={inputBaseClasses}
@@ -128,6 +131,23 @@ export function Contact({ contactPage, contact, businessName, onSubmit, submitSt
                             type={field.type}
                             placeholder={field.placeholder}
                             required={field.required}
+                            aria-required={field.required || undefined}
+                            /* WCAG 1.3.5 — autocomplete tokens mapped from field.name so
+                               browsers can autofill personal data fields. The field.name
+                               convention in this codebase uses common HTML autocomplete
+                               token values (name, email, tel) directly, so we forward it
+                               as-is. Fields whose name does not map to a known token
+                               (e.g. "message", "subject") will receive "off" which is
+                               safe and does not break anything. */
+                            autoComplete={
+                              field.name === 'email'
+                                ? 'email'
+                                : field.name === 'tel' || field.name === 'phone'
+                                  ? 'tel'
+                                  : field.name === 'name'
+                                    ? 'name'
+                                    : 'off'
+                            }
                             value={value}
                             onChange={(e) => handleChange(field.name, e.target.value)}
                             className={inputBaseClasses}
@@ -150,7 +170,7 @@ export function Contact({ contactPage, contact, businessName, onSubmit, submitSt
                     {submitStatus === 'error' && (
                       <p
                         role="alert"
-                        className="text-sm text-red-600"
+                        className="text-sm text-red-600 border-l-4 border-red-500 bg-red-50 pl-3 py-2 rounded-r-md"
                       >
                         Something went wrong. Please try again or email us directly.
                       </p>
@@ -187,7 +207,7 @@ export function Contact({ contactPage, contact, businessName, onSubmit, submitSt
                         </p>
                         <a
                           href={`tel:${contact.phone}`}
-                          className="text-sm text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors"
+                          className="text-sm text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
                         >
                           {contact.phone}
                         </a>
@@ -203,7 +223,7 @@ export function Contact({ contactPage, contact, businessName, onSubmit, submitSt
                         </p>
                         <a
                           href={`mailto:${contact.email}`}
-                          className="text-sm text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors"
+                          className="text-sm text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)]"
                         >
                           {contact.email}
                         </a>
