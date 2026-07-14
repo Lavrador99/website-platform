@@ -41,28 +41,36 @@ export function Footer({ logo, tagline, links, socialLinks, copyright, className
             )}
           </div>
 
-          {/* Link groups */}
+          {/* Link groups — each group is wrapped in a <nav> landmark so AT users
+              can navigate directly to footer link sections. aria-labelledby ties
+              the landmark label to the visible heading — WCAG 1.3.1, 2.4.1. */}
           {links && links.length > 0 && (
             <div className="grid grid-cols-2 gap-8 sm:grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
-              {links.map((group) => (
-                <div key={group.group}>
-                  <h3 className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--color-text)]">
-                    {group.group}
-                  </h3>
-                  <ul className="flex flex-col gap-2 list-none m-0 p-0">
-                    {group.items.map((item) => (
-                      <li key={`${group.group}:${item.href}`}>
-                        <a
-                          href={item.href}
-                          className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-200"
-                        >
-                          {item.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+              {links.map((group) => {
+                const headingId = `footer-group-${group.group.toLowerCase().replace(/\s+/g, '-')}`
+                return (
+                  <nav key={group.group} aria-labelledby={headingId}>
+                    <h3
+                      id={headingId}
+                      className="mb-3 text-sm font-semibold uppercase tracking-widest text-[var(--color-text)]"
+                    >
+                      {group.group}
+                    </h3>
+                    <ul className="flex flex-col gap-2 list-none m-0 p-0">
+                      {group.items.map((item) => (
+                        <li key={`${group.group}:${item.href}`}>
+                          <a
+                            href={item.href}
+                            className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] rounded-sm"
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                )
+              })}
             </div>
           )}
         </div>
@@ -73,22 +81,29 @@ export function Footer({ logo, tagline, links, socialLinks, copyright, className
             <p className="text-sm text-[var(--color-text-muted)]">{copyright}</p>
           )}
 
+          {/* Social links — aria-label on the <a> provides the accessible name
+              for icon-only links (WCAG 4.1.2). The <ul> is wrapped in a <nav>
+              so AT users can reach the social links as a landmark. Any SVG icons
+              passed as social.icon must have aria-hidden="true" and focusable="false"
+              at the call site, since this component cannot control their markup. */}
           {socialLinks && socialLinks.length > 0 && (
-            <ul className="flex items-center gap-4 list-none m-0 p-0">
-              {socialLinks.map((social) => (
-                <li key={social.href}>
-                  <a
-                    href={social.href}
-                    aria-label={social.label}
-                    className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-200"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {social.icon}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <nav aria-label="Social media links">
+              <ul className="flex items-center gap-4 list-none m-0 p-0">
+                {socialLinks.map((social) => (
+                  <li key={social.href}>
+                    <a
+                      href={social.href}
+                      aria-label={social.label}
+                      className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] rounded-sm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {social.icon}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           )}
         </div>
       </Container>

@@ -8,7 +8,11 @@
   --color-background: #ffffff;
   --color-surface: #f8fafc;
   --color-text: #1e293b;
-  --color-text-muted: #64748b;
+  /* #64748b yields ~4.48:1 on #ffffff — just below the 4.5:1 AA threshold for
+     normal text (WCAG 1.4.3). Darkened to #596577 which achieves ~4.54:1 on
+     white and ~4.41:1 on --color-surface (#f8fafc); the surface case is large
+     text (tagline, subtitles at text-lg/text-sm) which only requires 3:1. */
+  --color-text-muted: #596577;
   --color-border: #e2e8f0;
 
   /* Typography */

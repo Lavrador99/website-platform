@@ -34,6 +34,9 @@ export function CTA({
 
   const body = (
     <Container size="lg">
+      {/* h2 is correct here — CTA sections always appear below an h1 Hero.
+          Heading level should be adjusted if the document outline requires it
+          by passing a different element via the caller. WCAG 1.3.1. */}
       <div className="flex flex-col items-center text-center gap-6">
         <h2 className={ctaHeadlineClasses}>{headline}</h2>
         {subheadline && (
@@ -59,9 +62,15 @@ export function CTA({
   )
 
   if (background === 'gradient') {
+    // White text on the gradient (primary #2563eb → secondary #7c3aed) yields
+    // ~4.75:1 at the lightest point (primary end). This passes 4.5:1 for normal
+    // text at the design token values but should be re-verified if tokens change.
+    // aria-label on the <section> gives the region an accessible name so AT users
+    // can identify it in the landmarks list — WCAG 1.3.6, 2.4.6.
     return (
       <Section
         spacing={spacing}
+        aria-label={headline}
         className={clsx(
           'bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-secondary)] text-white',
           className,
@@ -76,6 +85,7 @@ export function CTA({
     <Section
       background={background === 'primary' ? 'primary' : 'surface'}
       spacing={spacing}
+      aria-label={headline}
       className={className}
     >
       {body}

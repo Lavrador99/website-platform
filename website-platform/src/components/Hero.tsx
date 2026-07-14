@@ -28,7 +28,10 @@ export function Hero({
 
   if (layout === 'split') {
     return (
-      <Section spacing="xl" className={className}>
+      // id="main-content" is the skip-link target placed by the Navbar component.
+      // aria-label gives the <section> landmark a name for AT landmark navigation
+      // — WCAG 1.3.1 Info and Relationships, 2.4.1 Bypass Blocks.
+      <Section id="main-content" aria-label="Hero" spacing="xl" className={className}>
         <Container size="xl">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             {/* Text column */}
@@ -61,7 +64,7 @@ export function Hero({
 
   // centered layout
   return (
-    <Section spacing="xl" className={className}>
+    <Section id="main-content" aria-label="Hero" spacing="xl" className={className}>
       <Container size="lg">
         <div className="flex flex-col items-center text-center gap-6">
           <h1 className={headlineClasses}>{headline}</h1>
