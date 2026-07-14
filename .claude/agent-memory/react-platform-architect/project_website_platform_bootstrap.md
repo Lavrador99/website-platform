@@ -1,6 +1,6 @@
 ---
-name: website-platform Phase 1 + Phase 2 bootstrap
-description: Phase 1 scaffold + Phase 2 component library complete — records key package versions, folder layout, component patterns, and architectural decisions
+name: website-platform Phase 1 + Phase 2 + Phase 3 bootstrap
+description: Phases 1–3 complete — records key package versions, folder layout, component patterns, page/container pattern, and architectural decisions
 type: project
 ---
 
@@ -72,3 +72,35 @@ src/
 
 **Why:** Phase 2 delivers the reusable UI layer. All components are config-agnostic — layouts/pages in Phase 3+ wire config via useWebsiteConfig props down.
 **How to apply:** Pages and layouts receive config values via props from parent containers that call useWebsiteConfig(). Component library itself never touches the hook.
+
+## Phase 3 — Pages, layouts, router (completed 2026-07-14)
+
+### WebsiteConfig additions
+Four optional typed sections added to `src/types/website-config.ts`: `about`, `services`, `portfolio`, `contactPage`. The existing `contact` (phone/email/address) is unchanged; `contactPage` is a separate field for CMS-driven form config.
+
+### Layout layer
+- `src/layouts/RootLayout.tsx` — pure presentational; accepts `navbarProps`, `footerProps`, `children`
+- `src/layouts/RootLayoutContainer.tsx` — sole useWebsiteConfig() call in layouts; builds nav links with active-state detection via useLocation(); renders `<Outlet />` inside RootLayout
+
+### Page + Container pattern
+Each page in `src/pages/<Name>/` contains:
+- `<Name>.tsx` — props-only component, zero context calls. Local useState only in Contact.tsx (controlled form fields — documented exception).
+- `<Name>Container.tsx` — single useWebsiteConfig() call; maps config to page props; handles fallback if optional section is undefined.
+- `index.ts` — barrel: `export { <Name>Container as default }; export { <Name> }; export type { <Name>Props }`
+
+Pages: Home, About, Services, Portfolio, Contact.
+
+### Router
+`src/router/index.tsx` — RootLayoutContainer + HomeContainer load eagerly. About/Services/Portfolio/Contact use React.lazy + Suspense with a minimal `<PageShell />` fallback. 404 → `<Navigate to="/" replace />`.
+
+### Alias added
+`@pages` → `src/pages` added to both `vite.config.ts` and `tsconfig.app.json`.
+
+### Notable decisions
+- Contact form state (controlled inputs) lives in `Contact.tsx` as the one documented exception to "no state in page components" — it is purely presentational UI state.
+- `ContactContainer.tsx` simulates async submit with 1500ms delay, always sets 'success' for demo.
+- Portfolio cards build their accent bar with an inline `style` prop for the accentColor — Tailwind cannot safely interpolate arbitrary dynamic CSS color values.
+- `tsc --noEmit` exits 0 with zero errors under strict + exactOptionalPropertyTypes.
+
+**Why:** Phase 3 wires the component library into real navigable pages while maintaining the config-isolation invariant throughout.
+**How to apply:** When adding a new page, create the folder, a props-only Page component, a Container that calls useWebsiteConfig(), and an index.ts barrel. Add the route to src/router/index.tsx with React.lazy.

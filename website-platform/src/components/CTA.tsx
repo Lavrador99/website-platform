@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { Section } from './Section'
 import { Container } from './Container'
@@ -6,8 +6,8 @@ import { Container } from './Container'
 export interface CTAProps {
   headline: string
   subheadline?: string
-  primaryAction?: React.ReactNode
-  secondaryAction?: React.ReactNode
+  primaryAction?: ReactNode
+  secondaryAction?: ReactNode
   background?: 'primary' | 'surface' | 'gradient'
   /**
    * Controls vertical padding. Defaults to 'lg'. Applied consistently across

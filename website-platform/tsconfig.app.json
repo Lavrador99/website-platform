@@ -31,13 +31,15 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
+      "@components": ["src/components/index.ts"],
       "@components/*": ["src/components/*"],
       "@hooks/*": ["src/hooks/*"],
       "@contexts/*": ["src/contexts/*"],
       "@clients/*": ["src/clients/*"],
       "@app-types/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
-      "@layouts/*": ["src/layouts/*"]
+      "@layouts/*": ["src/layouts/*"],
+      "@pages/*": ["src/pages/*"]
     }
   },
   "include": ["src/**/*"]

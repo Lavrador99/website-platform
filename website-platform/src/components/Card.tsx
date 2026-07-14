@@ -1,4 +1,5 @@
-import React from 'react'
+import { forwardRef } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
 
 const variantClasses = {
@@ -16,14 +17,14 @@ const paddingClasses = {
   lg: 'p-8',
 } as const
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   variant?: 'default' | 'elevated' | 'outlined' | 'ghost'
   padding?: 'none' | 'sm' | 'md' | 'lg'
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }
 
-export const Card = React.forwardRef<HTMLDivElement, CardProps>(
+export const Card = forwardRef<HTMLDivElement, CardProps>(
   function Card({ variant = 'default', padding = 'md', children, className, ...rest }, ref) {
     return (
       <div

@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { Container } from './Container'
 
@@ -10,11 +10,11 @@ export interface FooterLinkGroup {
 export interface FooterSocialLink {
   label: string
   href: string
-  icon: React.ReactNode
+  icon: ReactNode
 }
 
 export interface FooterProps {
-  logo: React.ReactNode
+  logo: ReactNode
   tagline?: string
   links?: FooterLinkGroup[]
   socialLinks?: FooterSocialLink[]

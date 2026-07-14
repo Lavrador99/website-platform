@@ -1,4 +1,4 @@
-import React from 'react'
+import type { ElementType, HTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
 
 const spacingClasses = {
@@ -16,11 +16,11 @@ const backgroundClasses = {
   transparent: 'bg-transparent',
 } as const
 
-export interface SectionProps extends React.HTMLAttributes<HTMLElement> {
-  as?: React.ElementType
+export interface SectionProps extends HTMLAttributes<HTMLElement> {
+  as?: ElementType
   spacing?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
   background?: 'default' | 'surface' | 'primary' | 'transparent'
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export function Section({

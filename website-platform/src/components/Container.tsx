@@ -1,4 +1,5 @@
-import React from 'react'
+import { forwardRef } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
 
 const sizeClasses = {
@@ -9,13 +10,13 @@ const sizeClasses = {
   full: 'max-w-full',
 } as const
 
-export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }
 
-export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
+export const Container = forwardRef<HTMLDivElement, ContainerProps>(
   function Container({ size = 'lg', children, className, ...rest }, ref) {
     return (
       <div

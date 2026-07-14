@@ -42,6 +42,67 @@ export interface WebsiteConfig {
     ctaHref: string
   }
 
+  about?: {
+    headline: string
+    /** 2-3 paragraph narrative, paragraphs separated by \n\n */
+    body: string
+    values: Array<{
+      icon: string
+      title: string
+      description: string
+    }>
+    team?: Array<{
+      name: string
+      role: string
+      bio: string
+      /** Initials displayed in the avatar circle, e.g. "JD" for John Doe */
+      avatarInitials: string
+    }>
+  }
+
+  services?: {
+    headline: string
+    subheadline?: string
+    items: Array<{
+      icon: string
+      title: string
+      description: string
+      features: string[]
+    }>
+  }
+
+  portfolio?: {
+    headline: string
+    subheadline?: string
+    items: Array<{
+      title: string
+      category: string
+      description: string
+      tags: string[]
+      /** CSS color for the card accent bar. Falls back to var(--color-primary). */
+      accentColor?: string
+    }>
+  }
+
+  /**
+   * CMS-driven contact page configuration.
+   * Distinct from `contact` (phone/email/address) — this configures the form.
+   */
+  contactPage?: {
+    headline: string
+    subheadline?: string
+    formFields: Array<{
+      name: string
+      label: string
+      type: 'text' | 'email' | 'tel' | 'textarea' | 'select'
+      placeholder?: string
+      required?: boolean
+      /** Valid only when type === 'select' */
+      options?: string[]
+    }>
+    successMessage?: string
+  }
+
   /**
    * Clients can extend the base config with additional sections.
    * Use specific interfaces for known sections; fall back to unknown for

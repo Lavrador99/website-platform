@@ -1,13 +1,13 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import { Section } from './Section'
 import { Container } from './Container'
 
 export interface HeroProps {
   headline: string
   subheadline?: string
-  primaryCta?: React.ReactNode
-  secondaryCta?: React.ReactNode
-  media?: React.ReactNode
+  primaryCta?: ReactNode
+  secondaryCta?: ReactNode
+  media?: ReactNode
   layout?: 'centered' | 'split'
   className?: string
 }

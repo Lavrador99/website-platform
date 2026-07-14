@@ -1,4 +1,4 @@
-import React from 'react'
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode, Ref } from 'react'
 import clsx from 'clsx'
 
 // --- Spinner ---
@@ -54,23 +54,23 @@ const baseClasses =
 
 // --- Discriminated union for href vs button ---
 
-type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+type AnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string
-  ref?: React.Ref<HTMLAnchorElement>
+  ref?: Ref<HTMLAnchorElement>
 }
 
-type NativeButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type NativeButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   href?: undefined
-  ref?: React.Ref<HTMLButtonElement>
+  ref?: Ref<HTMLButtonElement>
 }
 
 type SharedProps = {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
-  children: React.ReactNode
+  leftIcon?: ReactNode
+  rightIcon?: ReactNode
+  children: ReactNode
   className?: string
 }
 
